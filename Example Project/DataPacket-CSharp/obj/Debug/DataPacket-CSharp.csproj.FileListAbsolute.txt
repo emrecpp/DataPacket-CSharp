@@ -1,0 +1,10 @@
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\obj\Debug\DataPacket_CSharp.Form1.resources
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\obj\Debug\DataPacket_CSharp.Properties.Resources.resources
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\obj\Debug\DataPacket-CSharp.csproj.GenerateResource.cache
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\obj\Debug\DataPacket-CSharp.csproj.CoreCompileInputs.cache
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\bin\Debug\DataPacket-CSharp.exe.config
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\bin\Debug\DataPacket-CSharp.exe
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\bin\Debug\DataPacket-CSharp.pdb
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\obj\Debug\DataPacket-CSharp.exe
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\obj\Debug\DataPacket-CSharp.pdb
+C:\Users\Emre\source\repos\DataPacket-CSharp\DataPacket-CSharp\obj\Debug\DataPacket-CSharp.csprojAssemblyReference.cache
