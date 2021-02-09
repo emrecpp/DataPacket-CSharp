@@ -1,7 +1,9 @@
 # Data Packet for C#
 Store data as packet. Send, Recv, Encrypt it.
+
 For Pyhon: https://github.com/emrecpp/PacketHandler
-For C++: soon
+
+For C++: https://github.com/emrecpp/DataPacket-CPP
 
 
 # Example Usage
