@@ -1,9 +1,10 @@
-﻿/*
-Author: Emre Demircan
-Date: 2021-02-09
-Github: emrecpp
-Version: 1.0.0
+/*	
+Author: Emre Demircan	
+Date: 2021-02-09	
+Github: emrecpp	
+Version: 1.0.0	
 */
+
 using System;
 using System.Net.Sockets;
 using System.Collections.Generic;
@@ -17,11 +18,12 @@ namespace DataPacket_CSharp
     public class Packet
     {
         public List<Byte> storage = new List<byte>();
-        private bool MessageBoxError = true;
+        private bool PrintError = true;
         // First 2 bytes : Opcodes [ 0 - 255*256 ]
         // 4. byte: Flags
         // 5. byte: Count of Total Data types
-        // 6. byte: empty
+        // 6. byte: empty for now
+        // 7. byte: empty for now
 
         const int INDEX_OF_FLAG = 2;  // Flag
         const int INDEX_OF_COUNT_ELEMENTS = 3;
@@ -36,10 +38,10 @@ namespace DataPacket_CSharp
 
         private int _rpos = 6;
         private int _wpos = 6;
-        public Packet(int opcode = 0, bool littleEndian = false, bool ShowMessageBoxWhenError=true)
+        public Packet(int opcode = 0, bool littleEndian = false, bool PrintError= true)
         {
             isLittleEndian = littleEndian;
-            MessageBoxError = ShowMessageBoxWhenError;
+            this.PrintError = PrintError;
             if (opcode > 255 * 256)
                 throw new Exception("Opcode range: [ 0 - 65280]. Your opcode: " + opcode);
             
@@ -53,6 +55,8 @@ namespace DataPacket_CSharp
             buffer[3] = 0;
             buffer[4] = 0;
             buffer[5] = 0;
+            if (isLittleEndian)
+                buffer[INDEX_OF_FLAG] |= Flags.LittleEndian;
             storage.AddRange(buffer);
             _wpos = 6;
         }
@@ -224,7 +228,7 @@ namespace DataPacket_CSharp
             }
             catch (Exception ex)
             {
-                if (MessageBoxError) MessageBox.Show("Packet Print: \n" + ex.Message + "\n\n" + ex.StackTrace, "Hata");
+                if (PrintError) Console.WriteLine("Packet Print: \n" + ex.Message + "\n\n" + ex.StackTrace, "Hata");
                 return ex.Message;
             }
         }
@@ -305,6 +309,9 @@ namespace DataPacket_CSharp
                     this.storage.Add(b);
                 if ((bytes[INDEX_OF_FLAG] & Flags.Encrypted) == Flags.Encrypted)
                     Decrypt();
+                
+                isLittleEndian = (bytes[INDEX_OF_FLAG] & Flags.LittleEndian) == Flags.LittleEndian;
+                
                 _wpos += packetSize;
                 return true;
             }
