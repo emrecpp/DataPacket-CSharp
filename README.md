@@ -82,11 +82,11 @@ Little Endian
 
 
 Normal/Decrypted Print:
-00000000 AA BB 00 02 00 00 7B 00 00 00 0D 00 00 00 45 6D   ??..?{?.?.?.?Em
+00000000 AA BB 02 02 00 00 7B 00 00 00 0D 00 00 00 45 6D   ??..?{?.?.?.?Em
 00000010 72 65 20 44 65 6D 69 72 63 61 6E                  re.Demircan
 
 Encrypted Print:
-00000000 AA BB 01 02 00 00 3F C0 BC B8 C1 B0 AC A8 E9 0D   ??..??????????
+00000000 AA BB 03 02 00 00 3F C0 BC B8 C1 B0 AC A8 E9 0D   ??..??????????
 00000010 0E FD B4 D4 F1 F5 ED F2 DF D9 E2                  .??????????
 
 
@@ -96,7 +96,7 @@ Big Endian
 
 Normal/Decrypted Print:
 00000000 AA BB 00 02 00 00 00 00 00 7B 00 00 00 0D 45 6D   ??..?.?.{.?.Em
-00000010 72 65 20 44 65 6D 69 72 63 61 6E                  re.Demircan 
+00000010 72 65 20 44 65 6D 69 72 63 61 6E                  re.Demircan
 
 Encrypted Print:
 00000000 AA BB 01 02 00 00 C4 C0 BC 33 B4 B0 AC B5 E9 0D   ??..????3?????
