@@ -1,3 +1,10 @@
+/*	
+Author: Emre Demircan	
+Date: 2021-02-09	
+Github: emrecpp	
+Version: 1.0.0	
+*/
+
 using System;
 using System.Net.Sockets;
 using System.Collections.Generic;
