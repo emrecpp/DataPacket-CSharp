@@ -57,11 +57,7 @@ public int ClientHandler(Socket client)
             
             Console.WriteLine("Opcode: "+ pktReceiver.GetOpcode());            
             Console.WriteLine("Number:" + Number);
-            Console.WriteLine("Name:" + Name);
-            
-            
-            MessageBox.Show(String.Format("Got Packet NAME: {0} Number: {1}", NAME, NUMBER));
-            
+            Console.WriteLine("Name:" + Name);            
         }
     }
     return 0;
