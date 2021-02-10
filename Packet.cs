@@ -22,7 +22,8 @@ namespace DataPacket_CSharp
         // First 2 bytes : Opcodes [ 0 - 255*256 ]
         // 4. byte: Flags
         // 5. byte: Count of Total Data types
-        // 6. byte: empty
+        // 6. byte: empty for now
+        // 6. byte: empty for now
 
         const int INDEX_OF_FLAG = 2;  // Flag
         const int INDEX_OF_COUNT_ELEMENTS = 3;
