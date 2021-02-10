@@ -20,11 +20,8 @@ pkt.writeString("Emre Demircan");
   
 int Number = pkt.readInt(); // 123456
 string Name = pkt.readString(); // Emre Demircan
-
-
-
 ```
-## Send with Socket
+## Send
 ```
 Client client = new Client("127.0.0.1", 2000);
 
@@ -35,12 +32,10 @@ sendData.Encrypt(); // automatically will be decrypted when received packet.
 
 if (!sendData.Send(client.s)) // Client -> Server
     MessageBox.Show("Send Failed");
-    
-
 ```
 
 
-## Recv with Socket
+## Recv
 ```
 public int ClientHandler(Socket client)
 {
@@ -63,10 +58,7 @@ public int ClientHandler(Socket client)
     return 0;
 }
 
-
-
 Server server = new Server(2000, ClientHandler);
-
 ```
 
 # Output:
