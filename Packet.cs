@@ -23,7 +23,7 @@ namespace DataPacket_CSharp
         // 4. byte: Flags
         // 5. byte: Count of Total Data types
         // 6. byte: empty for now
-        // 6. byte: empty for now
+        // 7. byte: empty for now
 
         const int INDEX_OF_FLAG = 2;  // Flag
         const int INDEX_OF_COUNT_ELEMENTS = 3;
