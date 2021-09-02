@@ -42,8 +42,8 @@ namespace iProCafe_Oyun_Menüsü
         {
             isLittleEndian = littleEndian;
             this.PrintError = PrintError;
-            if (opcode > 255 * 256)
-                throw new Exception("Opcode range: [ 0 - 65280]. Your opcode: " + opcode);
+            if (opcode > 256 * 256 - 1)
+                throw new Exception("Opcode range: [ 0 - 65535]. Your opcode: " + opcode);
 
             byte[] buffer = new byte[2 + 4];// first 2 bytes : opcodes, the other 4 bytes: reserved
 
