@@ -19,7 +19,7 @@ namespace iProCafe_Oyun_Menüsü
     {
         public List<Byte> storage = new List<byte>();
         private bool PrintError = true;
-        // First 2 bytes : Opcodes [ 0 - 255*256 ]
+        // First 2 bytes : Opcodes [ 0 - 256*256-1 ]
         // 4. byte: Flags
         // 5. byte: Count of Total Data types
         // 6. byte: empty for now
