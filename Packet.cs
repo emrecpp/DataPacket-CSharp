@@ -13,7 +13,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace iProCafe_Oyun_Menüsü
+namespace PacketGlobal
 {
     public class Packet
     {
@@ -284,6 +284,10 @@ namespace iProCafe_Oyun_Menüsü
         public int GetOpcode()
         {
             return ((this.storage.Count > 0) ? (BitConverter.ToInt16(this.storage.GetRange(0, 2).ToArray().Reverse().ToArray(), 0)) : 0) & 0xFFFF;
+        }
+        public int GetItemsCount()
+        {
+            return (this.storage.Count > INDEX_OF_COUNT_ELEMENTS) ? (this.storage[INDEX_OF_COUNT_ELEMENTS]) : 0;
         }
         private bool RecvSize(Socket s, ref byte[] buffer, int packetSize)
         {
