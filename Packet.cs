@@ -1,8 +1,8 @@
 /*	
 Author: Emre Demircan	
-Date: 2021-02-09	
+Date: 2021-09-02	
 Github: emrecpp	
-Version: 1.0.0	
+Version: 1.0.1	
 */
 
 using System;
@@ -13,8 +13,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace DataPacket_CSharp
-{    
+namespace iProCafe_Oyun_Menüsü
+{
     public class Packet
     {
         public List<Byte> storage = new List<byte>();
@@ -38,13 +38,13 @@ namespace DataPacket_CSharp
 
         private int _rpos = 6;
         private int _wpos = 6;
-        public Packet(int opcode = 0, bool littleEndian = false, bool PrintError= true)
+        public Packet(int opcode = 0, bool littleEndian = false, bool PrintError = true)
         {
             isLittleEndian = littleEndian;
             this.PrintError = PrintError;
             if (opcode > 255 * 256)
                 throw new Exception("Opcode range: [ 0 - 65280]. Your opcode: " + opcode);
-            
+
             byte[] buffer = new byte[2 + 4];// first 2 bytes : opcodes, the other 4 bytes: reserved
 
 
@@ -266,7 +266,7 @@ namespace DataPacket_CSharp
 
             while (sentBytes < bytes.Length)
             {
-                int lastSentBytes = s.Send(storage.GetRange((int)sentBytes, (int)(storage.Count-sentBytes)).ToArray());
+                int lastSentBytes = s.Send(storage.GetRange((int)sentBytes, (int)(storage.Count - sentBytes)).ToArray());
                 if (lastSentBytes < 0)
                     return false;
                 sentBytes += lastSentBytes;
@@ -275,8 +275,8 @@ namespace DataPacket_CSharp
         }
 
         public void Clear()
-        {            
-            this.storage.Clear();            
+        {
+            this.storage.Clear();
             this._rpos = 6;
             //this.storage.AddRange(new byte[] { 0, 0, 0, 0, 0, 0 });
             //this._wpos = 6;
@@ -285,6 +285,18 @@ namespace DataPacket_CSharp
         {
             return ((this.storage.Count > 0) ? (BitConverter.ToInt16(this.storage.GetRange(0, 2).ToArray().Reverse().ToArray(), 0)) : 0) & 0xFFFF;
         }
+        private bool RecvSize(Socket s, ref byte[] buffer, int packetSize)
+        {
+            int totalBytesReceived = 0;
+            while (totalBytesReceived < packetSize)
+            {
+                int receivedLength = s.Receive(buffer, totalBytesReceived, Convert.ToInt32(packetSize - totalBytesReceived), SocketFlags.Partial);
+                if (receivedLength <= 0)
+                    return false;
+                totalBytesReceived += receivedLength;
+            }
+            return true;
+        }
         public bool Recv(Socket s, bool clear = true)
         {
             try
@@ -292,26 +304,28 @@ namespace DataPacket_CSharp
                 if (clear) Clear();
 
                 if (!s.Connected) return false;
+
                 byte[] dataLength = new byte[4];
-                int data = s.Receive(dataLength);
-                if (data <= 0)
+                if (!RecvSize(s, ref dataLength, 4))
                     return false;
+
 
                 if (!isLittleEndian) Array.Reverse(dataLength);
                 int packetSize = BitConverter.ToInt32(dataLength, 0);
 
                 byte[] bytes = new byte[packetSize];
-                data = s.Receive(bytes);
-                if (data <= 0)
+
+
+                if (!RecvSize(s, ref bytes, packetSize))
                     return false;
-                
+
                 foreach (byte b in bytes)
                     this.storage.Add(b);
                 if ((bytes[INDEX_OF_FLAG] & Flags.Encrypted) == Flags.Encrypted)
                     Decrypt();
-                
+
                 isLittleEndian = (bytes[INDEX_OF_FLAG] & Flags.LittleEndian) == Flags.LittleEndian;
-                
+
                 _wpos += packetSize;
                 return true;
             }
