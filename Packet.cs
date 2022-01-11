@@ -1,31 +1,30 @@
 /*	
 Author: Emre Demircan	
-Date: 2021-09-02	
+Date: 2022-01-11	
 Github: emrecpp	
-Version: 1.0.1	
+Version: 1.0.2	
 */
 
 using System;
 using System.Net.Sockets;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace PacketGlobal
+namespace DepotDownloader
 {
     public class Packet
     {
         public List<Byte> storage = new List<byte>();
         private bool PrintError = true;
         // First 2 bytes : Opcodes [ 0 - 256*256-1 ]
-        // 4. byte: Flags
-        // 5. byte: Count of Total Data types
-        // 6. byte: empty for now
-        // 7. byte: empty for now
+        //       4. byte : Flags
+        //       5. byte : Count of Total Data types
+        //       6. byte : empty for now
+        //       7. byte : empty for now
 
-        const int INDEX_OF_FLAG = 2;  // Flag
+        const int INDEX_OF_FLAG = 2;
         const int INDEX_OF_COUNT_ELEMENTS = 3;
 
 
@@ -77,7 +76,9 @@ namespace PacketGlobal
             _wpos += strLength.Length;
 
             for (int i = 0; i < data.Length; i++)
-                storage.Add(Convert.ToByte(data.ElementAt(i)));
+                foreach (byte b in Encoding.UTF8.GetBytes(data.ElementAt(i).ToString()))
+                    storage.Add(b);
+
 
             _wpos += data.Length;
             increaseItemCount();
@@ -258,20 +259,28 @@ namespace PacketGlobal
         }
         public bool Send(Socket s)
         {
-            if (!s.Connected) return false;
-            byte[] bytes = intToEndian(storage.Count);
-            long sentBytes = 0;
-
-            s.Send(bytes);
-
-            while (sentBytes < bytes.Length)
+            try
             {
-                int lastSentBytes = s.Send(storage.GetRange((int)sentBytes, (int)(storage.Count - sentBytes)).ToArray());
-                if (lastSentBytes < 0)
-                    return false;
-                sentBytes += lastSentBytes;
+                if (!s.Connected) return false;
+                byte[] bytes = intToEndian(storage.Count);
+                long sentBytes = 0;
+
+                s.Send(bytes);
+
+                while (sentBytes < bytes.Length)
+                {
+                    int lastSentBytes = s.Send(storage.GetRange((int)sentBytes, (int)(storage.Count - sentBytes)).ToArray());
+                    if (lastSentBytes < 0)
+                        return false;
+                    sentBytes += lastSentBytes;
+                }
+                return true;
             }
-            return true;
+            catch
+            {
+                return false;
+            }
+
         }
 
         public void Clear()
