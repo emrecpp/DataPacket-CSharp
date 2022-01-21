@@ -1,8 +1,8 @@
 /*	
 Author: Emre Demircan	
-Date: 2022-01-11	
+Date: 2022-01-21	
 Github: emrecpp	
-Version: 1.0.2	
+Version: 1.0.2.1
 */
 
 using System;
@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.IO;
 
 namespace DepotDownloader
 {
@@ -18,7 +19,7 @@ namespace DepotDownloader
     {
         public List<Byte> storage = new List<byte>();
         private bool PrintError = true;
-        // First 2 bytes : Opcodes [ 0 - 256*256-1 ]
+        // First 2 bytes : Opcodes [ 0 - (256*256-1) ]
         //       4. byte : Flags
         //       5. byte : Count of Total Data types
         //       6. byte : empty for now
@@ -31,7 +32,7 @@ namespace DepotDownloader
         private bool isLittleEndian = false;
         private static class Flags
         {
-            public static byte Encrypted = 1;
+            public static byte Encrypted    = 1;
             public static byte LittleEndian = 2;
         };
 
@@ -70,17 +71,16 @@ namespace DepotDownloader
 
         public void writeString(string data)
         {
-            var strLength = intToEndian(data.Length);
+            byte[] utf8bytes = Encoding.UTF8.GetBytes(data);
+
+            var strLength = intToEndian(utf8bytes.Length);
             foreach (byte b in strLength)
                 storage.Add(b);
             _wpos += strLength.Length;
 
-            for (int i = 0; i < data.Length; i++)
-                foreach (byte b in Encoding.UTF8.GetBytes(data.ElementAt(i).ToString()))
-                    storage.Add(b);
+            storage.AddRange(utf8bytes);
+            _wpos += utf8bytes.Length;
 
-
-            _wpos += data.Length;
             increaseItemCount();
         }
 
@@ -257,6 +257,15 @@ namespace DepotDownloader
             }
             storage[INDEX_OF_FLAG] &= (byte)~Flags.Encrypted;
         }
+        private bool Send_WaitToReach(Socket s, byte[] bytes)
+        {
+            long sent = 0;
+            while (sent < bytes.Length)
+            {
+                sent += s.Send(bytes.Skip((int)sent - 1).ToArray());
+            }
+            return true;
+        }
         public bool Send(Socket s)
         {
             try
@@ -265,7 +274,9 @@ namespace DepotDownloader
                 byte[] bytes = intToEndian(storage.Count);
                 long sentBytes = 0;
 
+                //SendWaitToReach(s, bytes);
                 s.Send(bytes);
+
 
                 while (sentBytes < bytes.Length)
                 {
@@ -347,6 +358,5 @@ namespace DepotDownloader
                 return false;
             }
         }
-
     }
 }
